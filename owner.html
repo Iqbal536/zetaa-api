@@ -1,0 +1,1761 @@
+<!-- owner.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Zeetasi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --light-gray: #f1f5f9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            color: var(--dark);
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .sidebar-header {
+            padding: 30px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .admin-badge {
+            background-color: var(--danger);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-left: 10px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+            padding: 15px 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--warning));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .user-email {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .menu-section {
+            margin-bottom: 30px;
+        }
+        
+        .menu-title {
+            padding: 0 30px 15px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.6;
+            font-weight: 600;
+        }
+        
+        .menu-items {
+            list-style: none;
+        }
+        
+        .menu-item {
+            margin-bottom: 5px;
+        }
+        
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 30px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .menu-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .menu-link.active {
+            color: white;
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0) 100%);
+            border-left: 4px solid var(--accent);
+        }
+        
+        .menu-link i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .menu-badge {
+            margin-left: auto;
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .dashboard-header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+        
+        .header-title h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .header-title p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .ip-display {
+            background-color: var(--light-gray);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            background-color: var(--gray);
+            color: white;
+        }
+        
+        .notification-bell {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .notification-bell:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--danger);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--warning));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 40px;
+        }
+        
+        .page-title {
+            margin-bottom: 40px;
+        }
+        
+        .page-title h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--danger);
+        }
+        
+        .page-title p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card.admin {
+            border-top: 4px solid var(--danger);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .stat-title {
+            color: var(--gray);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .users-icon {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        .revenue-icon {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+        
+        .api-icon {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: #2563eb;
+        }
+        
+        .activity-icon {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .positive {
+            color: var(--success);
+        }
+        
+        .negative {
+            color: var(--danger);
+        }
+        
+        /* Admin Sections */
+        .admin-section {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .section-description {
+            color: var(--gray);
+            margin-top: 5px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-admin {
+            background-color: var(--danger);
+            color: white;
+            border: 2px solid var(--danger);
+        }
+        
+        .btn-admin:hover {
+            background-color: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--gray);
+            color: var(--dark);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--light-gray);
+        }
+        
+        /* Users Table */
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .users-table th {
+            background-color: var(--light-gray);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .users-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            color: var(--gray);
+        }
+        
+        .users-table tr:hover {
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        .user-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        
+        .status-suspended {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        .status-pending {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+        
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--light-gray);
+            margin-right: 5px;
+        }
+        
+        .action-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .action-btn.danger:hover {
+            background-color: var(--danger);
+            border-color: var(--danger);
+        }
+        
+        /* Charts Placeholder */
+        .chart-container {
+            height: 300px;
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+            color: var(--gray);
+            font-style: italic;
+        }
+        
+        /* System Status */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .status-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .status-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .status-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .status-indicator {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+        }
+        
+        .status-operational {
+            background-color: var(--success);
+        }
+        
+        .status-degraded {
+            background-color: var(--warning);
+        }
+        
+        .status-outage {
+            background-color: var(--danger);
+        }
+        
+        .status-info p {
+            color: var(--gray);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .status-update {
+            background-color: var(--light-gray);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .update-time {
+            color: var(--gray);
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+        
+        /* AI Assistant Panel */
+        .ai-assistant-panel {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--warning));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(245, 158, 11, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+            }
+        }
+        
+        .ai-assistant-panel:hover {
+            transform: scale(1.1);
+            animation: none;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 240px;
+            }
+            
+            .main-content {
+                margin-left: 240px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+                margin-right: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-header {
+                padding: 20px;
+            }
+            
+            .dashboard-content {
+                padding: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header-actions {
+                gap: 10px;
+            }
+            
+            .ip-display, .theme-toggle, .notification-bell {
+                width: 35px;
+                height: 35px;
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .user-menu {
+                gap: 5px;
+            }
+            
+            .user-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                Zeetasi
+                <span class="admin-badge">ADMIN</span>
+            </div>
+            <div class="user-profile">
+                <div class="avatar">AD</div>
+                <div class="user-info">
+                    <div class="user-name">Admin User</div>
+                    <div class="user-email">admin@zeetasi.com</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sidebar-menu">
+            <div class="menu-section">
+                <div class="menu-title">Admin Dashboard</div>
+                <ul class="menu-items">
+                    <li class="menu-item">
+                        <a href="#" class="menu-link active" data-section="overview">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Overview</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-section="users">
+                            <i class="fas fa-users"></i>
+                            <span>Users Management</span>
+                            <span class="menu-badge" id="totalUsersCount">0</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-section="apikeys">
+                            <i class="fas fa-key"></i>
+                            <span>API Keys</span>
+                            <span class="menu-badge" id="totalApiKeysCount">0</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-section="analytics">
+                            <i class="fas fa-chart-line"></i>
+                            <span>System Analytics</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-title">System</div>
+                <ul class="menu-items">
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-section="status">
+                            <i class="fas fa-server"></i>
+                            <span>Server Status</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-section="alerts">
+                            <i class="fas fa-bell"></i>
+                            <span>System Alerts</span>
+                            <span class="menu-badge">3</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-section="notifications">
+                            <i class="fas fa-envelope"></i>
+                            <span>Notifications</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-section="settings">
+                            <i class="fas fa-cog"></i>
+                            <span>System Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-title">Billing</div>
+                <ul class="menu-items">
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-section="plans">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Subscription Plans</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-section="revenue">
+                            <i class="fas fa-hand-holding-usd"></i>
+                            <span>Revenue Reports</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-section="invoices">
+                            <i class="fas fa-file-invoice"></i>
+                            <span>Invoices</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-title">Admin</div>
+                <ul class="menu-items">
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-section="adminaccounts">
+                            <i class="fas fa-user-shield"></i>
+                            <span>Admin Accounts</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" id="adminLogoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-title">
+                    <h1>Admin Dashboard</h1>
+                    <p>Manage the entire Zeetasi platform and monitor system performance</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="ip-display" id="ipDisplay">
+                    <i class="fas fa-network-wired"></i>
+                    <span id="userIp">Loading...</span>
+                </div>
+                <div class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <div class="notification-badge"></div>
+                </div>
+                <div class="user-menu">
+                    <div class="user-avatar">AD</div>
+                    <div class="user-name">Admin</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- Overview Section -->
+            <div id="overviewSection">
+                <div class="page-title">
+                    <h2>System Overview</h2>
+                    <p>Monitor and manage all aspects of the Zeetasi platform</p>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card admin">
+                        <div class="stat-header">
+                            <div class="stat-title">Total Users</div>
+                            <div class="stat-icon users-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="totalUsers">0</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="usersGrowth">0 this week</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card admin">
+                        <div class="stat-header">
+                            <div class="stat-title">Active API Keys</div>
+                            <div class="stat-icon api-icon">
+                                <i class="fas fa-key"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="activeApiKeys">0</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="keysGrowth">0 this week</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card admin">
+                        <div class="stat-header">
+                            <div class="stat-title">Monthly Revenue</div>
+                            <div class="stat-icon revenue-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="monthlyRevenue">$0</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="revenueGrowth">0% from last month</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card admin">
+                        <div class="stat-header">
+                            <div class="stat-title">System Uptime</div>
+                            <div class="stat-icon activity-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="systemUptime">0%</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="uptimeGrowth">0% improvement</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- System Analytics Section -->
+                <div class="admin-section">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title">Platform Analytics</div>
+                            <div class="section-description">Monitor system performance and usage trends</div>
+                        </div>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-download"></i>
+                            Export Report
+                        </button>
+                    </div>
+                    
+                    <div class="chart-container">
+                        System Analytics Chart (Placeholder for Chart.js or similar library)
+                    </div>
+                    
+                    <div class="chart-container">
+                        API Usage by Type (Placeholder for Chart.js or similar library)
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Users Management Section -->
+            <div id="usersSection" style="display: none;">
+                <div class="page-title">
+                    <h2>Users Management</h2>
+                    <p>View, manage, and monitor all platform users</p>
+                </div>
+                
+                <div class="admin-section">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title">All Users</div>
+                            <div class="section-description">Manage user accounts and permissions</div>
+                        </div>
+                        <button class="btn btn-admin">
+                            <i class="fas fa-plus"></i>
+                            Add User
+                        </button>
+                    </div>
+                    
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Plan</th>
+                                <th>API Keys</th>
+                                <th>Status</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- Users will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- API Keys Management Section -->
+            <div id="apikeysSection" style="display: none;">
+                <div class="page-title">
+                    <h2>API Keys Management</h2>
+                    <p>View and manage all API keys across the platform</p>
+                </div>
+                
+                <div class="admin-section">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title">All API Keys</div>
+                            <div class="section-description">Monitor and manage API keys for all users</div>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <select id="apiKeyFilter" style="padding: 10px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-family: 'Poppins', sans-serif;">
+                                <option value="all">All API Keys</option>
+                                <option value="whatsapp">WhatsApp API Only</option>
+                                <option value="url">URL Research API Only</option>
+                                <option value="active">Active Only</option>
+                                <option value="inactive">Inactive Only</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>API Key</th>
+                                <th>Type</th>
+                                <th>User</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Requests</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="apiKeysTableBody">
+                            <!-- API keys will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- System Analytics Section -->
+            <div id="analyticsSection" style="display: none;">
+                <div class="page-title">
+                    <h2>System Analytics</h2>
+                    <p>Comprehensive analytics for the entire platform</p>
+                </div>
+                
+                <div class="admin-section">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title">Platform Usage</div>
+                            <div class="section-description">Detailed analytics for system performance</div>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <select id="analyticsTimeRange" style="padding: 10px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-family: 'Poppins', sans-serif;">
+                                <option value="7">Last 7 Days</option>
+                                <option value="30" selected>Last 30 Days</option>
+                                <option value="90">Last 90 Days</option>
+                                <option value="365">Last Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        Platform Usage Trends (Placeholder)
+                    </div>
+                    
+                    <div class="chart-container">
+                        User Growth Over Time (Placeholder)
+                    </div>
+                    
+                    <div class="chart-container">
+                        Revenue by Plan Type (Placeholder)
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Server Status Section -->
+            <div id="statusSection" style="display: none;">
+                <div class="page-title">
+                    <h2>Server Status</h2>
+                    <p>Monitor the health of all system components</p>
+                </div>
+                
+                <div class="admin-section">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title">System Status</div>
+                            <div class="section-description">Monitor the health of all system components</div>
+                        </div>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-history"></i>
+                            View History
+                        </button>
+                    </div>
+                    
+                    <div class="status-grid">
+                        <div class="status-card">
+                            <div class="status-header">
+                                <div class="status-title">API Gateway</div>
+                                <div class="status-indicator status-operational"></div>
+                            </div>
+                            <div class="status-info">
+                                <p>All systems operational. Response time under 100ms.</p>
+                                <div class="status-update">
+                                    <div class="update-time">Updated 5 minutes ago</div>
+                                    <div>System running at optimal performance with no issues detected.</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="status-card">
+                            <div class="status-header">
+                                <div class="status-title">Database Cluster</div>
+                                <div class="status-indicator status-operational"></div>
+                            </div>
+                            <div class="status-info">
+                                <p>Database cluster healthy with 99.99% uptime.</p>
+                                <div class="status-update">
+                                    <div class="update-time">Updated 10 minutes ago</div>
+                                    <div>Replication lag: 0ms. All nodes responding normally.</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="status-card">
+                            <div class="status-header">
+                                <div class="status-title">WhatsApp Service</div>
+                                <div class="status-indicator status-operational"></div>
+                            </div>
+                            <div class="status-info">
+                                <p>WhatsApp API integration operating normally.</p>
+                                <div class="status-update">
+                                    <div class="update-time">Updated 2 minutes ago</div>
+                                    <div>Message delivery rate: 99.8%. No service disruptions.</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="status-card">
+                            <div class="status-header">
+                                <div class="status-title">URL Research Engine</div>
+                                <div class="status-indicator status-operational"></div>
+                            </div>
+                            <div class="status-info">
+                                <p>URL analysis service running with optimal performance.</p>
+                                <div class="status-update">
+                                    <div class="update-time">Updated 8 minutes ago</div>
+                                    <div>Processing time: avg 1.2s per request. Cache hit rate: 87%.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Other sections would follow the same pattern -->
+            <div id="alertsSection" style="display: none;">
+                <div class="page-title">
+                    <h2>System Alerts</h2>
+                    <p>View and manage system alerts and notifications</p>
+                </div>
+                
+                <div class="admin-section">
+                    <div class="empty-state" style="text-align: center; padding: 60px 20px; background-color: var(--light-gray); border-radius: 12px; margin: 30px 0;">
+                        <i class="fas fa-bell" style="font-size: 3rem; color: var(--gray); margin-bottom: 20px;"></i>
+                        <h3 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 10px;">No Active Alerts</h3>
+                        <p style="color: var(--gray); margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto;">All systems are operating normally. No alerts to display at this time.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="notificationsSection" style="display: none;">
+                <div class="page-title">
+                    <h2>Notifications</h2>
+                    <p>Manage system-wide notifications</p>
+                </div>
+                
+                <div class="admin-section">
+                    <div class="empty-state" style="text-align: center; padding: 60px 20px; background-color: var(--light-gray); border-radius: 12px; margin: 30px 0;">
+                        <i class="fas fa-envelope" style="font-size: 3rem; color: var(--gray); margin-bottom: 20px;"></i>
+                        <h3 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 10px;">No Notifications</h3>
+                        <p style="color: var(--gray); margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto;">There are no pending notifications to display.</p>
+                        <button class="btn btn-admin">
+                            <i class="fas fa-bullhorn"></i>
+                            Send Notification
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="settingsSection" style="display: none;">
+                <div class="page-title">
+                    <h2>System Settings</h2>
+                    <p>Configure platform-wide settings</p>
+                </div>
+                
+                <div class="admin-section">
+                    <div style="display: grid; gap: 30px;">
+                        <div style="background-color: var(--light-gray); padding: 25px; border-radius: 12px;">
+                            <h3 style="margin-bottom: 20px; font-size: 1.2rem; font-weight: 600;">Platform Settings</h3>
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
+                                <div>
+                                    <div style="font-weight: 500; margin-bottom: 5px;">Maintenance Mode</div>
+                                    <div style="color: var(--gray); font-size: 0.9rem;">Enable to temporarily disable user access</div>
+                                </div>
+                                <label class="switch" style="position: relative; display: inline-block; width: 60px; height: 34px;">
+                                    <input type="checkbox" id="maintenanceMode">
+                                    <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px;"></span>
+                                    <span style="position: absolute; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div style="background-color: var(--light-gray); padding: 25px; border-radius: 12px;">
+                            <h3 style="margin-bottom: 20px; font-size: 1.2rem; font-weight: 600;">API Settings</h3>
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1);">
+                                <div>
+                                    <div style="font-weight: 500; margin-bottom: 5px;">Rate Limiting</div>
+                                    <div style="color: var(--gray); font-size: 0.9rem;">Enable API rate limiting for all users</div>
+                                </div>
+                                <label class="switch" style="position: relative; display: inline-block; width: 60px; height: 34px;">
+                                    <input type="checkbox" id="rateLimiting" checked>
+                                    <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px;"></span>
+                                    <span style="position: absolute; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;"></span>
+                                </label>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px 0;">
+                                <div>
+                                    <div style="font-weight: 500; margin-bottom: 5px;">Default Request Limit</div>
+                                    <div style="color: var(--gray); font-size: 0.9rem;">Default requests per day for new users</div>
+                                </div>
+                                <input type="number" value="100" style="padding: 8px 12px; border: 2px solid #e2e8f0; border-radius: 8px; width: 100px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Billing sections -->
+            <div id="plansSection" style="display: none;">
+                <div class="page-title">
+                    <h2>Subscription Plans</h2>
+                    <p>Manage platform subscription plans</p>
+                </div>
+                
+                <div class="admin-section">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                        <div style="background: white; border-radius: 16px; box-shadow: var(--shadow); padding: 30px; border-top: 4px solid var(--gray);">
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Starter</h3>
+                                <div style="font-size: 2rem; font-weight: 700; color: var(--gray); margin-bottom: 5px;">$0</div>
+                                <div style="color: var(--gray);">Free forever</div>
+                            </div>
+                            <button class="btn btn-outline" style="width: 100%;">Edit Plan</button>
+                        </div>
+                        
+                        <div style="background: white; border-radius: 16px; box-shadow: var(--shadow); padding: 30px; border-top: 4px solid var(--primary);">
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Professional</h3>
+                                <div style="font-size: 2rem; font-weight: 700; color: var(--primary); margin-bottom: 5px;">$29</div>
+                                <div style="color: var(--gray);">per month</div>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%;">Edit Plan</button>
+                        </div>
+                        
+                        <div style="background: white; border-radius: 16px; box-shadow: var(--shadow); padding: 30px; border-top: 4px solid var(--secondary);">
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Enterprise</h3>
+                                <div style="font-size: 2rem; font-weight: 700; color: var(--secondary); margin-bottom: 5px;">$99</div>
+                                <div style="color: var(--gray);">per month</div>
+                            </div>
+                            <button class="btn btn-outline" style="width: 100%;">Edit Plan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="revenueSection" style="display: none;">
+                <div class="page-title">
+                    <h2>Revenue Reports</h2>
+                    <p>View detailed revenue analytics</p>
+                </div>
+                
+                <div class="admin-section">
+                    <div class="chart-container">
+                        Monthly Revenue Trends (Placeholder)
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 30px;">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-title">Total Revenue</div>
+                                <div class="stat-icon" style="background-color: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">$8,472</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>12% from last month</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-title">Active Subscriptions</div>
+                                <div class="stat-icon" style="background-color: rgba(37, 99, 235, 0.1); color: #2563eb;">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">247</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>8% growth</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-title">Avg. Revenue Per User</div>
+                                <div class="stat-icon" style="background-color: rgba(16, 185, 129, 0.1); color: #10b981;">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">$34.30</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>$2.10 increase</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="invoicesSection" style="display: none;">
+                <div class="page-title">
+                    <h2>Invoices</h2>
+                    <p>Manage and view all platform invoices</p>
+                </div>
+                
+                <div class="admin-section">
+                    <div class="empty-state" style="text-align: center; padding: 60px 20px; background-color: var(--light-gray); border-radius: 12px; margin: 30px 0;">
+                        <i class="fas fa-file-invoice-dollar" style="font-size: 3rem; color: var(--gray); margin-bottom: 20px;"></i>
+                        <h3 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 10px;">No Invoices</h3>
+                        <p style="color: var(--gray); margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto;">There are no invoices to display at this time.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="adminaccountsSection" style="display: none;">
+                <div class="page-title">
+                    <h2>Admin Accounts</h2>
+                    <p>Manage administrator accounts</p>
+                </div>
+                
+                <div class="admin-section">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title">Administrator Accounts</div>
+                            <div class="section-description">Manage users with administrative privileges</div>
+                        </div>
+                        <button class="btn btn-admin">
+                            <i class="fas fa-user-plus"></i>
+                            Add Admin
+                        </button>
+                    </div>
+                    
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>Admin</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Last Login</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Admin User</td>
+                                <td>admin@zeetasi.com</td>
+                                <td>Super Admin</td>
+                                <td>Today, 10:30 AM</td>
+                                <td><span class="user-status status-active">Active</span></td>
+                                <td>
+                                    <div class="action-btn" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </div>
+                                    <div class="action-btn danger" title="Remove">
+                                        <i class="fas fa-trash"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Support Manager</td>
+                                <td>support@zeetasi.com</td>
+                                <td>Support Admin</td>
+                                <td>Yesterday, 3:45 PM</td>
+                                <td><span class="user-status status-active">Active</span></td>
+                                <td>
+                                    <div class="action-btn" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </div>
+                                    <div class="action-btn danger" title="Remove">
+                                        <i class="fas fa-trash"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Assistant Panel -->
+    <div class="ai-assistant-panel" id="aiAssistant">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Check if admin is logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('owner_logged_in') !== 'true') {
+                // Redirect to login page if not logged in as owner
+                window.location.href = 'login.html';
+            }
+            
+            // Initialize admin dashboard
+            initAdminDashboard();
+        });
+        
+        function initAdminDashboard() {
+            // Get all registered users
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            
+            // Calculate stats
+            const totalUsers = registeredUsers.length;
+            let totalApiKeys = 0;
+            let whatsappKeys = 0;
+            let urlKeys = 0;
+            
+            // Get API keys for all users
+            registeredUsers.forEach(user => {
+                const userWhatsappKeys = JSON.parse(localStorage.getItem('whatsappKeys') || '[]').length;
+                const userUrlKeys = JSON.parse(localStorage.getItem('urlKeys') || '[]').length;
+                totalApiKeys += userWhatsappKeys + userUrlKeys;
+                whatsappKeys += userWhatsappKeys;
+                urlKeys += userUrlKeys;
+            });
+            
+            // Update stats
+            document.getElementById('totalUsers').textContent = totalUsers;
+            document.getElementById('totalUsersCount').textContent = totalUsers;
+            document.getElementById('activeApiKeys').textContent = totalApiKeys;
+            document.getElementById('totalApiKeysCount').textContent = totalApiKeys;
+            document.getElementById('monthlyRevenue').textContent = '$' + (totalUsers * 23.5).toFixed(0); // Simulated revenue
+            document.getElementById('systemUptime').textContent = '99.98%';
+            
+            // Update growth stats
+            document.getElementById('usersGrowth').textContent = Math.floor(Math.random() * 20) + ' this week';
+            document.getElementById('keysGrowth').textContent = Math.floor(Math.random() * 50) + ' this week';
+            document.getElementById('revenueGrowth').textContent = Math.floor(Math.random() * 15) + '% from last month';
+            document.getElementById('uptimeGrowth').textContent = (0.01 + Math.random() * 0.02).toFixed(2) + '% improvement';
+            
+            // Populate users table
+            const usersTableBody = document.getElementById('usersTableBody');
+            usersTableBody.innerHTML = '';
+            
+            registeredUsers.forEach(user => {
+                const row = document.createElement('tr');
+                const createdAt = new Date(user.createdAt);
+                const userWhatsappKeys = JSON.parse(localStorage.getItem('whatsappKeys') || '[]').length;
+                const userUrlKeys = JSON.parse(localStorage.getItem('urlKeys') || '[]').length;
+                const totalUserKeys = userWhatsappKeys + userUrlKeys;
+                
+                row.innerHTML = `
+                    <td>${user.firstName} ${user.lastName}</td>
+                    <td>${user.email}</td>
+                    <td>${user.plan || 'Starter'}</td>
+                    <td>${totalUserKeys}</td>
+                    <td><span class="user-status status-active">Active</span></td>
+                    <td>${createdAt.toLocaleDateString()}</td>
+                    <td>
+                        <div class="action-btn" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <div class="action-btn" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="action-btn danger" title="Suspend">
+                            <i class="fas fa-ban"></i>
+                        </div>
+                    </td>
+                `;
+                usersTableBody.appendChild(row);
+            });
+            
+            // Populate API keys table
+            const apiKeysTableBody = document.getElementById('apiKeysTableBody');
+            apiKeysTableBody.innerHTML = '';
+            
+            // Add WhatsApp keys
+            const whatsappKeysData = JSON.parse(localStorage.getItem('whatsappKeys') || '[]');
+            whatsappKeysData.forEach(key => {
+                const row = document.createElement('tr');
+                const createdAt = new Date(key.createdAt);
+                
+                row.innerHTML = `
+                    <td>${key.key.substring(0, 20)}...</td>
+                    <td><span class="user-status whatsapp-tag">WhatsApp</span></td>
+                    <td>John Doe</td>
+                    <td><span class="user-status status-active">Active</span></td>
+                    <td>${createdAt.toLocaleDateString()}</td>
+                    <td>${key.requests || 0}</td>
+                    <td>
+                        <div class="action-btn" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="action-btn danger" title="Revoke">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </td>
+                `;
+                apiKeysTableBody.appendChild(row);
+            });
+            
+            // Add URL keys
+            const urlKeysData = JSON.parse(localStorage.getItem('urlKeys') || '[]');
+            urlKeysData.forEach(key => {
+                const row = document.createElement('tr');
+                const createdAt = new Date(key.createdAt);
+                
+                row.innerHTML = `
+                    <td>${key.key.substring(0, 20)}...</td>
+                    <td><span class="user-status url-tag">URL Research</span></td>
+                    <td>John Doe</td>
+                    <td><span class="user-status status-active">Active</span></td>
+                    <td>${createdAt.toLocaleDateString()}</td>
+                    <td>${key.requests || 0}</td>
+                    <td>
+                        <div class="action-btn" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="action-btn danger" title="Revoke">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </td>
+                `;
+                apiKeysTableBody.appendChild(row);
+            });
+            
+            // Display admin's IP address
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('userIp').textContent = data.ip;
+                })
+                .catch(error => {
+                    document.getElementById('userIp').textContent = 'Unable to fetch IP';
+                    console.error('Error fetching IP:', error);
+                });
+            
+            // Setup event listeners
+            setupAdminEventListeners();
+        }
+        
+        function setupAdminEventListeners() {
+            // Menu toggle for mobile
+            document.getElementById('menuToggle').addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('active');
+            });
+            
+            // Sidebar menu navigation
+            document.querySelectorAll('.menu-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Hide all sections
+                    document.querySelectorAll('[id$="Section"]').forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    
+                    // Show selected section
+                    const sectionId = this.getAttribute('data-section') + 'Section';
+                    if (document.getElementById(sectionId)) {
+                        document.getElementById(sectionId).style.display = 'block';
+                    }
+                });
+            });
+            
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', function() {
+                alert('Dark/Light mode toggle would be implemented here.');
+            });
+            
+            // Admin logout
+            document.getElementById('adminLogoutBtn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('owner_logged_in');
+                    localStorage.removeItem('isLoggedIn');
+                    window.location.href = 'login.html';
+                }
+            });
+            
+            // AI Assistant for Admin
+            document.getElementById('aiAssistant').addEventListener('click', function() {
+                // Create AI assistant modal
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 2000;
+                    padding: 20px;
+                `;
+                
+                modal.innerHTML = `
+                    <div style="background: white; border-radius: 16px; width: 100%; max-width: 500px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);">
+                        <div style="background: linear-gradient(135deg, #f59e0b, #eab308); color: white; padding: 20px; display: flex; align-items: center; justify-content: space-between;">
+                            <h3 style="margin: 0; font-weight: 600;">Zeetasi Admin AI Assistant</h3>
+                            <button id="closeAssistant" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
+                        </div>
+                        <div id="chatMessages" style="flex: 1; padding: 20px; overflow-y: auto; background-color: #f8fafc;">
+                            <div style="background: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);">
+                                <strong>AI Assistant:</strong> Hello Admin! I'm your Zeetasi AI assistant. How can I help you with system monitoring, user management, or any administrative tasks today?
+                            </div>
+                        </div>
+                        <div style="padding: 20px; border-top: 1px solid #e2e8f0; display: flex; gap: 10px;">
+                            <input type="text" id="userQuery" placeholder="Type your question here..." style="flex: 1; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 1rem;">
+                            <button id="sendQuery" style="background: linear-gradient(135deg, #f59e0b, #eab308); color: white; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-weight: 500;">Send</button>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                // Close modal
+                document.getElementById('closeAssistant').addEventListener('click', function() {
+                    document.body.removeChild(modal);
+                });
+                
+                // Send query
+                document.getElementById('sendQuery').addEventListener('click', function() {
+                    const queryInput = document.getElementById('userQuery');
+                    const query = queryInput.value.trim();
+                    
+                    if (query) {
+                        // Add user message
+                        const chatMessages = document.getElementById('chatMessages');
+                        const userMessage = document.createElement('div');
+                        userMessage.style.cssText = 'background: #f59e0b; color: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; margin-left: 20%;';
+                        userMessage.innerHTML = `<strong>You:</strong> ${query}`;
+                        chatMessages.appendChild(userMessage);
+                        
+                        // Clear input
+                        queryInput.value = '';
+                        
+                        // Show typing indicator
+                        const typingIndicator = document.createElement('div');
+                        typingIndicator.style.cssText = 'background: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);';
+                        typingIndicator.innerHTML = '<strong>AI Assistant:</strong> <i>Processing your request...</i>';
+                        chatMessages.appendChild(typingIndicator);
+                        
+                        // Scroll to bottom
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                        
+                        // Simulate AI response
+                        setTimeout(() => {
+                            chatMessages.removeChild(typingIndicator);
+                            
+                            let response = '';
+                            if (query.toLowerCase().includes('user') || query.toLowerCase().includes('users')) {
+                                response = "You can manage all users from the 'Users Management' section. There you can view user details, suspend accounts, or add new users. The system currently shows all registered users with their API key counts and account status.";
+                            } else if (query.toLowerCase().includes('api') && query.toLowerCase().includes('key')) {
+                                response = "All API keys across the platform can be managed from the 'API Keys' section. You can filter by type (WhatsApp or URL Research) or status. Each key shows the associated user, creation date, and request count.";
+                            } else if (query.toLowerCase().includes('system') || query.toLowerCase().includes('status')) {
+                                response = "The Server Status section shows the health of all system components including API Gateway, Database Cluster, WhatsApp Service, and URL Research Engine. All components are currently operational with excellent performance metrics.";
+                            } else if (query.toLowerCase().includes('revenue') || query.toLowerCase().includes('billing')) {
+                                response = "Revenue reports and subscription plans can be managed in the Billing sections. The system shows monthly revenue, active subscriptions, and average revenue per user. You can also edit subscription plans and view invoices.";
+                            } else if (query.toLowerCase().includes('setting') || query.toLowerCase().includes('config')) {
+                                response = "System-wide settings can be configured in the System Settings section. This includes enabling maintenance mode, configuring API rate limiting, and setting default request limits for new users.";
+                            } else {
+                                response = "I can help you with user management, API key monitoring, system status, revenue reports, or system configuration. Try asking about a specific section of the admin dashboard, and I'll guide you through it.";
+                            }
+                            
+                            const aiMessage = document.createElement('div');
+                            aiMessage.style.cssText = 'background: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);';
+                            aiMessage.innerHTML = `<strong>AI Assistant:</strong> ${response}`;
+                            chatMessages.appendChild(aiMessage);
+                            
+                            // Scroll to bottom
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }, 1500);
+                    }
+                });
+                
+                // Allow Enter key to send message
+                document.getElementById('userQuery').addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        document.getElementById('sendQuery').click();
+                    }
+                });
+            });
+            
+            // API key filter
+            document.getElementById('apiKeyFilter').addEventListener('change', function() {
+                const filterValue = this.value;
+                alert(`Filtering API keys by: ${filterValue}`);
+                // In a real app, this would filter the table data
+            });
+            
+            // Analytics time range
+            document.getElementById('analyticsTimeRange').addEventListener('change', function() {
+                const timeRange = this.value;
+                alert(`Showing analytics for last ${timeRange} days`);
+                // In a real app, this would update the charts
+            });
+            
+            // Table row actions
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.action-btn')) {
+                    const btn = e.target.closest('.action-btn');
+                    const action = btn.title;
+                    alert(`${action} action would be performed here.`);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
